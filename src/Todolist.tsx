@@ -18,18 +18,25 @@ type TodolistPropsType = {
 }
 
 export const Todolist = (props: TodolistPropsType) => {
-  const [titleInput, setTitleInput] = useState<string>('')
+
   const {title, tasks, addTask, deleteTask, changeFilter, changeStatus} = props
+  const [titleInput, setTitleInput] = useState<string>('')
+  const [inputError, setInputError] = useState<boolean>(false)
 
   const onChangeTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.value.trim()) {
+      setInputError(false)
+    } else{
+      setInputError(true)
+    }
     setTitleInput(e.currentTarget.value)
   }
 
   const onAddTaskHandler = () => {
-    titleInput.trim() !== '' && addTask(titleInput.trim())
-    setTitleInput('')
+    const trimmedTitle = titleInput.trim()
+    trimmedTitle ? addTask(trimmedTitle) : setInputError(true)
+    setTitleInput("");
   }
-
 
   const onAllFilterHandler = () => {
     changeFilter('All')
@@ -72,10 +79,12 @@ export const Todolist = (props: TodolistPropsType) => {
         <h3>{title}</h3>
         <div>
           <input
+            className={inputError ? 'error' : ''}
             value={titleInput}
             onChange={onChangeTaskHandler}
             onKeyPress={onKeyPressHandler}/>
           <button onClick={onAddTaskHandler}>+</button>
+          {inputError && <div className='error-message'>Field is required</div>}
         </div>
         <ul>
           {mapped}
