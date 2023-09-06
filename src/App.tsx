@@ -27,7 +27,7 @@ export const App = () => {
     resultTasks = tasks.filter((t) => !t.isDone)
   }
   if (filter === 'Completed') {
-      resultTasks = tasks.filter((t) => t.isDone)
+    resultTasks = tasks.filter((t) => t.isDone)
   }
 
   const changeFilter = (value: filterType) => {

@@ -25,10 +25,8 @@ export const Todolist = (props: TodolistPropsType) => {
     setTitleInput(e.currentTarget.value)
   }
 
-
-
   const onAddTaskHandler = () => {
-    addTask(titleInput)
+    titleInput.trim() !== '' && addTask(titleInput.trim())
     setTitleInput('')
   }
 
