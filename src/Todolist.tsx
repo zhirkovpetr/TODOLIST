@@ -1,6 +1,8 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import './App.css';
+
 import {FilterType} from "./App";
+
+import './App.css';
 
 type TaskType = {
   id: string
@@ -9,18 +11,19 @@ type TaskType = {
 }
 
 type TodolistPropsType = {
+  todolistId: string
   title: string
   tasks: TaskType[]
-  deleteTask: (deleteTask: string) => void
-  changeFilter: (value: FilterType) => void
-  addTask: (title: string) => void
-  changeStatus: (taskId: string, isDone: boolean) => void
+  deleteTask: (deleteTask: string, todolistId: string) => void
+  deleteTodolist: (todolistId: string) => void
+  changeTodolistFilter: (value: FilterType, todolistId: string) => void
+  addTask: (title: string, todolistId: string) => void
+  changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void
   filter: FilterType
 }
 
-export const Todolist = (props: TodolistPropsType) => {
-
-  const {title, tasks, addTask, deleteTask, changeFilter, changeStatus, filter} = props
+export const Todolist: React.FC<TodolistPropsType> = (props) => {
+  const {title, tasks, addTask, deleteTask, changeTodolistFilter, changeTaskStatus, filter, todolistId, deleteTodolist} = props
   const [titleInput, setTitleInput] = useState<string>('')
   const [inputError, setInputError] = useState<boolean>(false)
 
@@ -35,20 +38,20 @@ export const Todolist = (props: TodolistPropsType) => {
 
   const onAddTaskHandler = () => {
     const trimmedTitle = titleInput.trim()
-    trimmedTitle ? addTask(trimmedTitle) : setInputError(true)
+    trimmedTitle ? addTask(trimmedTitle, todolistId) : setInputError(true)
     setTitleInput("");
   }
 
   const onAllFilterHandler = () => {
-    changeFilter('All')
+    changeTodolistFilter('All', todolistId)
   }
 
   const onCompletedFilterHandler = () => {
-    changeFilter('Completed')
+    changeTodolistFilter('Completed', todolistId)
   }
 
   const onActiveFilterHandler = () => {
-    changeFilter('Active')
+    changeTodolistFilter('Active', todolistId)
   }
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -56,13 +59,16 @@ export const Todolist = (props: TodolistPropsType) => {
       onAddTaskHandler()
     }
   }
+  const onDeleteTodolistHandler = () => {
+    deleteTodolist(todolistId)
+  }
 
   const mapped = tasks.map((task) => {
     const deleteTaskHandler = () => {
-      deleteTask(task.id)
+      deleteTask(task.id, todolistId)
     }
     const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-      changeStatus(task.id, e.currentTarget.checked)
+      changeTaskStatus(task.id, e.currentTarget.checked, todolistId)
     }
     return (
       <div key={task.id} className={task.isDone ? 'is-done' : ''}>
@@ -77,7 +83,7 @@ export const Todolist = (props: TodolistPropsType) => {
   return (
     <div className="App">
       <div>
-        <h3>{title}</h3>
+        <h3>{title}<button onClick={onDeleteTodolistHandler}>x</button></h3>
         <div>
           <input
             className={inputError ? 'error' : ''}
