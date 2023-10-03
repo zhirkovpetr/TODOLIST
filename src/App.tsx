@@ -3,6 +3,12 @@ import React, {useState} from 'react';
 import {TaskType, Todolist} from "./Todolist";
 import {AddItemForm} from "./AddItemForm";
 
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 import './App.css';
 
 export type FilterType = 'All' | 'Active' | 'Completed'
@@ -91,33 +97,48 @@ export const App: React.FC = () => {
 
   return (
     <div className={'todolist-block'}>
-      <AddItemForm addItem={addTodolistHandler}/>
-      {todolists.map((todolist) => {
-        let resultTasks = tasks[todolist.id];
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+            TODOLIST
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Container fixed>
+        <Grid container style={{padding: '10px'}}>
+          <AddItemForm addItem={addTodolistHandler}/>
+        </Grid>
+        <Grid container spacing={10}>
+          {todolists.map((todolist) => {
+            let resultTasks = tasks[todolist.id];
 
-        if (todolist.filter === 'Active') {
-          resultTasks = resultTasks.filter((t) => !t.isDone);
-        }
-        if (todolist.filter === 'Completed') {
-          resultTasks = resultTasks.filter((t) => t.isDone);
-        }
+            if (todolist.filter === 'Active') {
+              resultTasks = resultTasks.filter((t) => !t.isDone);
+            }
+            if (todolist.filter === 'Completed') {
+              resultTasks = resultTasks.filter((t) => t.isDone);
+            }
 
-        return (
-          <Todolist
-            key={todolist.id}
-            todolistId={todolist.id}
-            title={todolist.title}
-            tasks={resultTasks}
-            filter={todolist.filter}
-            addTask={addTask}
-            deleteTask={deleteTask}
-            changeTaskStatus={changeTaskStatus}
-            deleteTodolist={deleteTodolist}
-            changeTaskTitle={changeTaskTitle}
-            changeTodolistTitle={changeTodolistTitle}
-            changeTodolistFilter={changeTodolistFilter}/>
-        );
-      })}
+            return <Grid item>
+              <Paper style={{padding: '15px'}}>
+                <Todolist
+                  key={todolist.id}
+                  todolistId={todolist.id}
+                  title={todolist.title}
+                  tasks={resultTasks}
+                  filter={todolist.filter}
+                  addTask={addTask}
+                  deleteTask={deleteTask}
+                  changeTaskStatus={changeTaskStatus}
+                  deleteTodolist={deleteTodolist}
+                  changeTaskTitle={changeTaskTitle}
+                  changeTodolistTitle={changeTodolistTitle}
+                  changeTodolistFilter={changeTodolistFilter}/>
+              </Paper>
+            </Grid>
+          })}
+        </Grid>
+      </Container>
     </div>
   );
 }

@@ -3,6 +3,10 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0;
 }
 
+ul {
+  list-style: none;
+}
+
 .todolist-block {
   display: flex;
   justify-content: space-around;
@@ -11,13 +15,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 10px;
 }
 
-.error {
-  border: red 1px solid
-}
-
-.error-message {
-  color: red;
-}
 
 .active-filter {
   background-color: coral;
