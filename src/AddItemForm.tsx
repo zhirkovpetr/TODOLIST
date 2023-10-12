@@ -1,54 +1,58 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
+import { ControlPoint } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import {ControlPoint} from "@mui/icons-material";
 
 type AddItemFormPropsType = {
-  addItem: (title: string) => void
-}
+  addItem: (title: string) => void;
+};
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = (props) => {
-  let {addItem} = props
-  const [titleInput, setTitleInput] = useState<string>('')
-  const [inputError, setInputError] = useState<boolean>(false)
+export const AddItemForm: React.FC<AddItemFormPropsType> = props => {
+  const { addItem } = props;
+  const [titleInput, setTitleInput] = useState<string>('');
+  const [inputError, setInputError] = useState<boolean>(false);
 
-  const onChangeTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeTaskHandler = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.currentTarget.value.trim()) {
-      setInputError(false)
+      setInputError(false);
     } else {
-      setInputError(true)
+      setInputError(true);
     }
-    setTitleInput(e.currentTarget.value)
-  }
+    setTitleInput(e.currentTarget.value);
+  };
 
-  const onAddTaskHandler = () => {
-    const trimmedTitle = titleInput.trim()
-    trimmedTitle ? addItem(trimmedTitle) : setInputError(true)
-    setTitleInput("");
-  }
+  const onAddTaskHandler = (): void => {
+    const trimmedTitle = titleInput.trim();
+    if (trimmedTitle) {
+      addItem(trimmedTitle);
+    } else {
+      setInputError(true);
+    }
+    setTitleInput('');
+  };
 
-  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
-      onAddTaskHandler()
+      onAddTaskHandler();
     }
-  }
+  };
 
   return (
     <div>
       <TextField
         required
         label="enter text"
-        variant={'outlined'}
+        variant="outlined"
         error={inputError}
         value={titleInput}
         onChange={onChangeTaskHandler}
         onKeyPress={onKeyPressHandler}
         helperText={inputError && 'Field is required'}
       />
-      <IconButton color={'primary'} onClick={onAddTaskHandler}>
-        <ControlPoint/>
+      <IconButton color="primary" onClick={onAddTaskHandler}>
+        <ControlPoint />
       </IconButton>
     </div>
-  )
-}
+  );
+};
