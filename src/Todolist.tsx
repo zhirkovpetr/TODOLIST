@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+
 import './App.css';
 
 export type TaskType = {
@@ -74,7 +75,7 @@ export const Todolist: React.FC<TodolistPropsType> = (props) => {
     return (
       <div key={task.id} className={task.isDone ? 'is-done' : ''}>
         <li>
-          <Checkbox checked={task.isDone} onChange={onChangeStatusHandler} size="small" />
+          <Checkbox checked={task.isDone} onChange={onChangeStatusHandler} size="small"/>
           <EditSpan title={task.title} onChangeTitle={onChangeTaskTitle}/>
           <IconButton onClick={deleteTaskHandler} aria-label="delete" size="small">
             <DeleteIcon fontSize="small"/>

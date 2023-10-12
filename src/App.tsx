@@ -1,7 +1,14 @@
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 
 import {TaskType, Todolist} from "./Todolist";
 import {AddItemForm} from "./AddItemForm";
+import {
+  AddTodolistAC,
+  ChangeTodolistFilterAC,
+  ChangeTodolistTitleAC,
+  RemoveTodolistAC,
+  todolistReducer
+} from "./reducers/todolist-reducer";
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,11 +16,12 @@ import Typography from '@mui/material/Typography';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+
 import './App.css';
 
 export type FilterType = 'All' | 'Active' | 'Completed'
 
-type TodolistType = {
+export type TodolistType = {
   id: string
   title: string
   filter: FilterType
@@ -27,9 +35,9 @@ export const App: React.FC = () => {
   const todolistId1 = crypto.randomUUID()
   const todolistId2 = crypto.randomUUID()
 
-  let [todolists, setTodolists] = useState<TodolistType[]>([
-    {id: todolistId1, title: 'What to learn ? ', filter: 'All'},
-    {id: todolistId2, title: 'What to buy ? ', filter: 'All'},
+  const [todolists, dispatchTodolists] = useReducer(todolistReducer, [
+    {id: todolistId1, title: "What to learn", filter: "All"},
+    {id: todolistId2, title: "What to buy", filter: "All"}
   ])
 
   let [tasks, setTasks] = useState<TaskStateType>({
@@ -48,18 +56,15 @@ export const App: React.FC = () => {
   })
 
   const changeTodolistFilter = (value: FilterType, todolistId: string) => {
-    setTodolists(todolists.map(todolist => todolist.id === todolistId ? {
-      ...todolist,
-      filter: value
-    } : {...todolist}))
+    dispatchTodolists(ChangeTodolistFilterAC(value, todolistId))
   }
 
   const deleteTask = (id: string, todolistId: string) => {
     setTasks({...tasks, [todolistId]: tasks[todolistId].filter(task => task.id !== id)})
   }
 
-  const deleteTodolist = (todolistId: string) => {
-    setTodolists(todolists.filter(todolist => todolist.id !== todolistId))
+  const removeTodolist = (todolistId: string) => {
+    dispatchTodolists(RemoveTodolistAC(todolistId))
     delete tasks[todolistId]
   }
 
@@ -77,15 +82,12 @@ export const App: React.FC = () => {
 
   const addTodolistHandler = (title: string) => {
     let todolistId = crypto.randomUUID()
-    setTodolists([{id: todolistId, title: title + ' ', filter: 'All'}, ...todolists])
+    dispatchTodolists(AddTodolistAC(title, todolistId))
     setTasks({...tasks, [todolistId]: []})
   }
 
   const changeTodolistTitle = (title: string, todolistId: string) => {
-    setTodolists(todolists.map(todolist => todolist.id === todolistId ? {
-      ...todolist,
-      title: title
-    } : {...todolist}))
+   dispatchTodolists(ChangeTodolistTitleAC(title, todolistId))
   }
 
   const changeTaskTitle = (taskId: string, title: string, todolistId: string) => {
@@ -130,7 +132,7 @@ export const App: React.FC = () => {
                   addTask={addTask}
                   deleteTask={deleteTask}
                   changeTaskStatus={changeTaskStatus}
-                  deleteTodolist={deleteTodolist}
+                  deleteTodolist={removeTodolist}
                   changeTaskTitle={changeTaskTitle}
                   changeTodolistTitle={changeTodolistTitle}
                   changeTodolistFilter={changeTodolistFilter}/>
