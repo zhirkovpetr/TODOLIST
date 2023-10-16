@@ -62,15 +62,12 @@ export const tasksReducer = (state: TaskStateType, action: ActionType): TaskStat
       };
     }
     case REMOVE_TODOLIST_TASK: {
-      const {
-        // eslint-disable-next-line no-empty-pattern
-        [action.id]: [],
-        ...rest
-      } = state;
-      return rest;
+      const copyState = { ...state };
+      delete copyState[action.payload.id];
+      return copyState;
     }
     case ADD_TODOLIST_TASK: {
-      return { ...state, [action.newTodolistId]: [] };
+      return { ...state, [action.payload.newTodolistId]: [] };
     }
     default: {
       return state;
@@ -103,7 +100,7 @@ export const ChangeTaskTitleAC = (id: string, title: string, todolistId: string)
   } as const);
 
 export const RemoveTodolistTaskAC = (id: string) =>
-  ({ type: REMOVE_TODOLIST_TASK, id } as const);
+  ({ type: REMOVE_TODOLIST_TASK, payload: { id } } as const);
 
-export const AddTodolistTaskAC = (title: string, newTodolistId: string) =>
-  ({ type: ADD_TODOLIST_TASK, title, newTodolistId } as const);
+export const AddTodolistTaskAC = (newTodolistId: string) =>
+  ({ type: ADD_TODOLIST_TASK, payload: { newTodolistId } } as const);

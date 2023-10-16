@@ -92,7 +92,7 @@ export const App: React.FC = () => {
   const addTodolistHandler = (title: string): void => {
     const todolistId = crypto.randomUUID();
     dispatchTodolists(AddTodolistAC(title, todolistId));
-    dispatchTasks(AddTodolistTaskAC(title, todolistId));
+    dispatchTasks(AddTodolistTaskAC(todolistId));
   };
 
   const changeTodolistTitle = (title: string, todolistId: string): void => {
