@@ -8,7 +8,7 @@ type EditSpanPropsType = {
 };
 
 export const EditSpan: React.FC<EditSpanPropsType> = props => {
-  const { title } = props;
+  const { title, onChangeTitle } = props;
   const [editMode, setEditMode] = useState(false);
   const [newTitle, setNewTitle] = useState('');
 
@@ -22,7 +22,7 @@ export const EditSpan: React.FC<EditSpanPropsType> = props => {
   };
   const activateViewMode = (): void => {
     setEditMode(false);
-    props.onChangeTitle(newTitle);
+    onChangeTitle(newTitle);
   };
 
   return editMode ? (
