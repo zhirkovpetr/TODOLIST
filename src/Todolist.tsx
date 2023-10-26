@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
+import { observer } from 'mobx-react-lite';
 
 import { AddItemForm } from './AddItemForm';
 import { FilterType } from './App';
@@ -21,6 +22,7 @@ type TodolistPropsType = {
   todolistId: string;
   title: string;
   tasks: TaskType[];
+  filter: FilterType;
   deleteTask: (deleteTask: string, todolistId: string) => void;
   deleteTodolist: (todolistId: string) => void;
   changeTodolistFilter: (value: FilterType, todolistId: string) => void;
@@ -28,10 +30,9 @@ type TodolistPropsType = {
   changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void;
   changeTaskTitle: (taskId: string, title: string, todolistId: string) => void;
   changeTodolistTitle: (title: string, todolistId: string) => void;
-  filter: FilterType;
 };
 
-export const Todolist: React.FC<TodolistPropsType> = props => {
+export const Todolist: React.FC<TodolistPropsType> = observer(props => {
   const {
     title,
     tasks,
@@ -62,21 +63,24 @@ export const Todolist: React.FC<TodolistPropsType> = props => {
     deleteTodolist(todolistId);
   };
 
-  const mapped = tasks.map(task => {
+  const mapped = tasks.map(t => {
     const deleteTaskHandler = (): void => {
-      deleteTask(task.id, todolistId);
+      deleteTask(t.id, todolistId);
     };
+
     const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>): void => {
-      changeTaskStatus(task.id, e.currentTarget.checked, todolistId);
+      changeTaskStatus(t.id, e.currentTarget.checked, todolistId);
     };
+
     const onChangeTaskTitle = (newTitle: string): void => {
-      changeTaskTitle(task.id, newTitle, todolistId);
+      changeTaskTitle(t.id, newTitle, todolistId);
     };
+
     return (
-      <div key={task.id} className={task.isDone ? 'is-done' : ''}>
+      <div key={t.id} className={t.isDone ? 'is-done' : ''}>
         <li>
-          <Checkbox checked={task.isDone} onChange={onChangeStatusHandler} size="small" />
-          <EditSpan title={task.title} onChangeTitle={onChangeTaskTitle} />
+          <Checkbox checked={t.isDone} onChange={onChangeStatusHandler} size="small" />
+          <EditSpan title={t.title} onChangeTitle={onChangeTaskTitle} />
           <IconButton onClick={deleteTaskHandler} aria-label="delete" size="small">
             <DeleteIcon fontSize="small" />
           </IconButton>
@@ -130,4 +134,4 @@ export const Todolist: React.FC<TodolistPropsType> = props => {
       </div>
     </div>
   );
-};
+});
