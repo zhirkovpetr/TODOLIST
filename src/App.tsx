@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
@@ -28,43 +28,48 @@ export type TaskStateType = {
 };
 
 export const App: React.FC = observer(() => {
-  const changeTodolistFilter = (value: FilterType, todolistId: string): void => {
-    todolist.changeTodolistFilter(value, todolistId);
-  };
+  const changeTodolistFilter = useCallback(
+    (value: FilterType, todolistId: string): void => {
+      todolist.changeTodolistFilter(value, todolistId);
+    },
+    [],
+  );
 
-  const deleteTask = (id: string, todolistId: string): void => {
+  const deleteTask = useCallback((id: string, todolistId: string): void => {
     task.removeTask(id, todolistId);
-  };
+  }, []);
 
-  const removeTodolist = (todolistId: string): void => {
+  const removeTodolist = useCallback((todolistId: string): void => {
     todolist.removeTodolist(todolistId);
-  };
+  }, []);
 
-  const addTask = (title: string, todolistId: string): void => {
+  const addTask = useCallback((title: string, todolistId: string): void => {
     task.addTask(title, todolistId);
-  };
+  }, []);
 
-  const changeTaskStatus = (
-    taskId: string,
-    isDone: boolean,
-    todolistId: string,
-  ): void => {
-    task.changeTaskStatus(taskId, isDone, todolistId);
-  };
+  const changeTaskStatus = useCallback(
+    (taskId: string, isDone: boolean, todolistId: string): void => {
+      task.changeTaskStatus(taskId, isDone, todolistId);
+    },
+    [],
+  );
 
-  const addTodolistHandler = (title: string): void => {
+  const addTodolistHandler = useCallback((title: string): void => {
     const todolistId = crypto.randomUUID();
     todolist.addTodolist(title, todolistId);
     task.addTaskForTodolist(todolistId);
-  };
+  }, []);
 
-  const changeTodolistTitle = (title: string, todolistId: string): void => {
+  const changeTodolistTitle = useCallback((title: string, todolistId: string): void => {
     todolist.changeTodolistTitle(title, todolistId);
-  };
+  }, []);
 
-  const changeTaskTitle = (taskId: string, title: string, todolistId: string): void => {
-    task.changeTaskTitle(taskId, title, todolistId);
-  };
+  const changeTaskTitle = useCallback(
+    (taskId: string, title: string, todolistId: string): void => {
+      task.changeTaskTitle(taskId, title, todolistId);
+    },
+    [],
+  );
 
   return (
     <div className="todolist-block">
@@ -81,14 +86,7 @@ export const App: React.FC = observer(() => {
         </Grid>
         <Grid container spacing={10}>
           {todolist.initialState.map(todo => {
-            let resultTasks = task.initialState[todo.id];
-
-            if (todo.filter === 'Active') {
-              resultTasks = resultTasks.filter(t => !t.isDone);
-            }
-            if (todo.filter === 'Completed') {
-              resultTasks = resultTasks.filter(t => t.isDone);
-            }
+            const resultTasks = task.initialState[todo.id];
 
             return (
               <Grid item key={todo.id}>
