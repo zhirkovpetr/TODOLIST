@@ -1,14 +1,14 @@
-import React, { ChangeEvent } from 'react';
+import React, { memo, useCallback } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import { observer } from 'mobx-react-lite';
 
 import { AddItemForm } from './AddItemForm';
 import { FilterType } from './App';
 import { EditSpan } from './EditSpan';
+import { Task } from './Task';
 
 import './App.css';
 
@@ -32,106 +32,112 @@ type TodolistPropsType = {
   changeTodolistTitle: (title: string, todolistId: string) => void;
 };
 
-export const Todolist: React.FC<TodolistPropsType> = observer(props => {
-  const {
-    title,
-    tasks,
-    addTask,
-    deleteTask,
-    changeTodolistFilter,
-    changeTaskStatus,
-    filter,
-    todolistId,
-    deleteTodolist,
-    changeTaskTitle,
-    changeTodolistTitle,
-  } = props;
+export const Todolist: React.FC<TodolistPropsType> = memo(
+  observer(props => {
+    const {
+      title,
+      tasks,
+      addTask,
+      deleteTask,
+      changeTodolistFilter,
+      changeTaskStatus,
+      filter,
+      todolistId,
+      deleteTodolist,
+      changeTaskTitle,
+      changeTodolistTitle,
+    } = props;
 
-  const onAllFilterHandler = (): void => {
-    changeTodolistFilter('All', todolistId);
-  };
+    const onAllFilterHandler = useCallback((): void => {
+      changeTodolistFilter('All', todolistId);
+    }, [changeTodolistFilter, todolistId]);
 
-  const onCompletedFilterHandler = (): void => {
-    changeTodolistFilter('Completed', todolistId);
-  };
+    const onCompletedFilterHandler = useCallback((): void => {
+      changeTodolistFilter('Completed', todolistId);
+    }, [changeTodolistFilter, todolistId]);
 
-  const onActiveFilterHandler = (): void => {
-    changeTodolistFilter('Active', todolistId);
-  };
+    const onActiveFilterHandler = useCallback((): void => {
+      changeTodolistFilter('Active', todolistId);
+    }, [changeTodolistFilter, todolistId]);
 
-  const onDeleteTodolistHandler = (): void => {
-    deleteTodolist(todolistId);
-  };
-
-  const mapped = tasks.map(t => {
-    const deleteTaskHandler = (): void => {
-      deleteTask(t.id, todolistId);
+    const onDeleteTodolistHandler = (): void => {
+      deleteTodolist(todolistId);
     };
 
-    const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>): void => {
-      changeTaskStatus(t.id, e.currentTarget.checked, todolistId);
-    };
+    let resultTasks = tasks;
 
-    const onChangeTaskTitle = (newTitle: string): void => {
-      changeTaskTitle(t.id, newTitle, todolistId);
-    };
+    if (filter === 'Active') {
+      resultTasks = tasks.filter(t => !t.isDone);
+    }
+    if (filter === 'Completed') {
+      resultTasks = tasks.filter(t => t.isDone);
+    }
+
+    const mapped = resultTasks.map(t => (
+      <Task
+        key={t.id}
+        task={t}
+        changeTaskTitle={changeTaskTitle}
+        changeTaskStatus={changeTaskStatus}
+        deleteTask={deleteTask}
+        todolistId={todolistId}
+      />
+    ));
+
+    const addTaskHandler = useCallback(
+      (newTaskTitle: string): void => {
+        addTask(newTaskTitle, todolistId);
+      },
+      [addTask, todolistId],
+    );
+
+    const onChangeTodolistTitle = useCallback(
+      (newTodolistTitle: string): void => {
+        changeTodolistTitle(newTodolistTitle, todolistId);
+      },
+      [changeTodolistTitle, todolistId],
+    );
 
     return (
-      <div key={t.id} className={t.isDone ? 'is-done' : ''}>
-        <li>
-          <Checkbox checked={t.isDone} onChange={onChangeStatusHandler} size="small" />
-          <EditSpan title={t.title} onChangeTitle={onChangeTaskTitle} />
-          <IconButton onClick={deleteTaskHandler} aria-label="delete" size="small">
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </li>
-      </div>
-    );
-  });
-
-  const addTaskHandler = (newTaskTitle: string): void => {
-    addTask(newTaskTitle, todolistId);
-  };
-
-  const onChangeTodolistTitle = (newTodolistTitle: string): void => {
-    changeTodolistTitle(newTodolistTitle, todolistId);
-  };
-
-  return (
-    <div className="App">
-      <div>
-        <h3>
-          <EditSpan title={title} onChangeTitle={onChangeTodolistTitle} />
-          <IconButton aria-label="delete" size="large" onClick={onDeleteTodolistHandler}>
-            <DeleteIcon />
-          </IconButton>
-        </h3>
-        <AddItemForm addItem={addTaskHandler} />
-        <ul>{mapped}</ul>
+      <div className="App">
         <div>
-          <Button
-            variant={filter === 'All' ? 'contained' : 'text'}
-            color="error"
-            onClick={() => onAllFilterHandler()}
-          >
-            All
-          </Button>
-          <Button
-            color="primary"
-            variant={filter === 'Active' ? 'contained' : 'text'}
-            onClick={() => onActiveFilterHandler()}
-          >
-            Active
-          </Button>
-          <Button
-            color="secondary"
-            variant={filter === 'Completed' ? 'contained' : 'text'}
-            onClick={() => onCompletedFilterHandler()}
-          >
-            Completed
-          </Button>
+          <h3>
+            <EditSpan title={title} onChangeTitle={onChangeTodolistTitle} />
+            <IconButton
+              aria-label="delete"
+              size="large"
+              onClick={onDeleteTodolistHandler}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </h3>
+          <AddItemForm addItem={addTaskHandler} />
+          <ul>{mapped}</ul>
+          <div>
+            <Button
+              variant={filter === 'All' ? 'contained' : 'text'}
+              color="error"
+              onClick={() => onAllFilterHandler()}
+            >
+              All
+            </Button>
+            <Button
+              color="primary"
+              variant={filter === 'Active' ? 'contained' : 'text'}
+              onClick={() => onActiveFilterHandler()}
+            >
+              Active
+            </Button>
+            <Button
+              color="secondary"
+              variant={filter === 'Completed' ? 'contained' : 'text'}
+              onClick={() => onCompletedFilterHandler()}
+            >
+              Completed
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  }),
+);
