@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.11",
     "@mui/material": "^5.14.11",
+    "@storybook/addon-actions": "^7.5.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -26,7 +27,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "storybook dev -p 9009",
+    "build-storybook": "storybook build"
   },
   "eslintConfig": {
     "extends": [
@@ -47,8 +50,19 @@
     ]
   },
   "devDependencies": {
+    "@storybook/addon-essentials": "7.5.2",
+    "@storybook/addon-interactions": "7.5.2",
+    "@storybook/addon-links": "7.5.2",
+    "@storybook/addon-onboarding": "1.0.8",
+    "@storybook/blocks": "7.5.2",
+    "@storybook/cli": "^7.5.2",
+    "@storybook/preset-create-react-app": "7.5.2",
+    "@storybook/react": "7.5.2",
+    "@storybook/react-webpack5": "7.5.2",
+    "@storybook/testing-library": "0.2.2",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
+    "babel-plugin-named-exports-order": "0.0.2",
     "eslint": "^8.1.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -58,6 +72,10 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "prettier": "^2.4.1"
+    "eslint-plugin-storybook": "^0.6.15",
+    "prettier": "^2.4.1",
+    "prop-types": "15.8.1",
+    "storybook": "7.5.2",
+    "webpack": "5.89.0"
   }
 }
