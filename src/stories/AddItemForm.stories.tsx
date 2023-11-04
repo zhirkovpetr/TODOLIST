@@ -1,14 +1,34 @@
-import React, { ChangeEvent, KeyboardEvent, memo, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 
-import { ControlPoint } from '@mui/icons-material';
+import AddBox from '@mui/icons-material/AddBox';
 import IconButton from '@mui/material/IconButton';
-import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField/TextField';
+import { action } from '@storybook/addon-actions';
+import type { Meta, StoryObj } from '@storybook/react';
 
-export type AddItemFormPropsType = {
-  addItem: (title: string) => void;
+import { AddItemForm, AddItemFormPropsType } from '../AddItemForm';
+
+const meta: Meta<typeof AddItemForm> = {
+  title: 'TODOLIST/AddItemForm',
+  component: AddItemForm,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    addItem: {
+      description: 'Clicked button inside form',
+      action: 'clicked',
+    },
+  },
 };
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = memo(props => {
+export default meta;
+type Story = StoryObj<typeof AddItemForm>;
+
+export const AddItemFormStory: Story = {};
+
+const ErrorAddItemForm = React.memo((props: AddItemFormPropsType) => {
   const { addItem } = props;
   const [titleInput, setTitleInput] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
@@ -41,18 +61,21 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo(props => {
   return (
     <div>
       <TextField
-        required
-        label="enter text"
         variant="outlined"
-        error={inputError}
+        error={!inputError}
         value={titleInput}
         onChange={onChangeTaskHandler}
         onKeyPress={onKeyPressHandler}
-        helperText={inputError && 'Field is required'}
+        label="Title"
+        helperText={!inputError && 'Field is required'}
       />
       <IconButton color="primary" onClick={onAddTaskHandler}>
-        <ControlPoint />
+        <AddBox />
       </IconButton>
     </div>
   );
 });
+
+export const ErrorAddItemFormStory: Story = {
+  render: () => <ErrorAddItemForm addItem={action('Clicked button inside form')} />,
+};
