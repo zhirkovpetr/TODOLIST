@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
@@ -12,6 +12,7 @@ import { AddItemForm } from './AddItemForm';
 import task from './store/task';
 import todolist from './store/todolist';
 import { TaskType, Todolist } from './Todolist';
+import { useApp } from './useApp';
 
 import './App.css';
 
@@ -28,48 +29,16 @@ export type TaskStateType = {
 };
 
 export const App: React.FC = observer(() => {
-  const changeTodolistFilter = useCallback(
-    (value: FilterType, todolistId: string): void => {
-      todolist.changeTodolistFilter(value, todolistId);
-    },
-    [],
-  );
-
-  const deleteTask = useCallback((id: string, todolistId: string): void => {
-    task.removeTask(id, todolistId);
-  }, []);
-
-  const removeTodolist = useCallback((todolistId: string): void => {
-    todolist.removeTodolist(todolistId);
-  }, []);
-
-  const addTask = useCallback((title: string, todolistId: string): void => {
-    task.addTask(title, todolistId);
-  }, []);
-
-  const changeTaskStatus = useCallback(
-    (taskId: string, isDone: boolean, todolistId: string): void => {
-      task.changeTaskStatus(taskId, isDone, todolistId);
-    },
-    [],
-  );
-
-  const addTodolistHandler = useCallback((title: string): void => {
-    const todolistId = crypto.randomUUID();
-    todolist.addTodolist(title, todolistId);
-    task.addTaskForTodolist(todolistId);
-  }, []);
-
-  const changeTodolistTitle = useCallback((title: string, todolistId: string): void => {
-    todolist.changeTodolistTitle(title, todolistId);
-  }, []);
-
-  const changeTaskTitle = useCallback(
-    (taskId: string, title: string, todolistId: string): void => {
-      task.changeTaskTitle(taskId, title, todolistId);
-    },
-    [],
-  );
+  const {
+    changeTodolistFilter,
+    deleteTask,
+    removeTodolist,
+    addTask,
+    changeTaskStatus,
+    addTodolistHandler,
+    changeTodolistTitle,
+    changeTaskTitle,
+  } = useApp();
 
   return (
     <div className="todolist-block">

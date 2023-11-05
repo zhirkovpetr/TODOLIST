@@ -1,4 +1,4 @@
-import React, { ChangeEvent, memo, useCallback } from 'react';
+import React, { memo } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 
 import { EditSpan } from './EditSpan';
 import { TaskType } from './Todolist';
+import { useTask } from './useTask';
 
 type TTaskProps = {
   task: TaskType;
@@ -18,20 +19,14 @@ type TTaskProps = {
 export const Task: React.FC<TTaskProps> = memo(props => {
   const { task, todolistId, deleteTask, changeTaskStatus, changeTaskTitle } = props;
 
-  const deleteTaskHandler = (): void => {
-    deleteTask(task.id, todolistId);
-  };
+  const { deleteTaskHandler, onChangeStatusHandler, onChangeTaskTitle } = useTask({
+    task,
+    todolistId,
+    deleteTask,
+    changeTaskStatus,
+    changeTaskTitle,
+  });
 
-  const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>): void => {
-    changeTaskStatus(task.id, e.currentTarget.checked, todolistId);
-  };
-
-  const onChangeTaskTitle = useCallback(
-    (newTitle: string): void => {
-      changeTaskTitle(task.id, newTitle, todolistId);
-    },
-    [changeTaskTitle, task.id, todolistId],
-  );
   return (
     <div className={task.isDone ? 'is-done' : ''}>
       <li>

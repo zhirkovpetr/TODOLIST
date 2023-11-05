@@ -9,6 +9,7 @@ import { AddItemForm } from './AddItemForm';
 import { FilterType } from './App';
 import { EditSpan } from './EditSpan';
 import { Task } from './Task';
+import { useTodolist } from './useTodolist';
 
 import './App.css';
 
@@ -48,21 +49,12 @@ export const Todolist: React.FC<TodolistPropsType> = memo(
       changeTodolistTitle,
     } = props;
 
-    const onAllFilterHandler = useCallback((): void => {
-      changeTodolistFilter('All', todolistId);
-    }, [changeTodolistFilter, todolistId]);
-
-    const onCompletedFilterHandler = useCallback((): void => {
-      changeTodolistFilter('Completed', todolistId);
-    }, [changeTodolistFilter, todolistId]);
-
-    const onActiveFilterHandler = useCallback((): void => {
-      changeTodolistFilter('Active', todolistId);
-    }, [changeTodolistFilter, todolistId]);
-
-    const onDeleteTodolistHandler = (): void => {
-      deleteTodolist(todolistId);
-    };
+    const {
+      onAllFilterHandler,
+      onCompletedFilterHandler,
+      onActiveFilterHandler,
+      onDeleteTodolistHandler,
+    } = useTodolist({ changeTodolistFilter, deleteTodolist, todolistId });
 
     let resultTasks = tasks;
 
