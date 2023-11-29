@@ -4,9 +4,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 
-import { EditSpan } from './EditSpan';
-import { TaskType } from './Todolist';
-import { useTask } from './useTask';
+import { EditSpan } from '../editSpan/EditSpan';
+import { TaskType } from '../todolist/Todolist';
+
+import { useTask } from './hooks/useTask';
 
 type TTaskProps = {
   task: TaskType;

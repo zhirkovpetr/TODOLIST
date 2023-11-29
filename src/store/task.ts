@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import { TaskStateType } from '../App';
+import { TaskStateType } from '../app/App';
 
 import todolist from './todolist';
 

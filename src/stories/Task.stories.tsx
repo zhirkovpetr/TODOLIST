@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Task } from '../Task';
+import { Task } from '../task/Task';
 
 const meta: Meta<typeof Task> = {
   title: 'TODOLIST/Task',
