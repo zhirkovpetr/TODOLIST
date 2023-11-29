@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField/TextField';
 import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { AddItemForm, AddItemFormPropsType } from '../AddItemForm';
+import { AddItemForm, AddItemFormPropsType } from '../addItemForm/AddItemForm';
 
 const meta: Meta<typeof AddItemForm> = {
   title: 'TODOLIST/AddItemForm',

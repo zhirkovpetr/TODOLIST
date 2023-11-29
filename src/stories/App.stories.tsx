@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { App } from '../App';
+import { App } from '../app/App';
 
 const meta: Meta<typeof App> = {
   title: 'TODOLIST/App',

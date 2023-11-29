@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
-import { FilterType } from './App';
-import task from './store/task';
-import todolist from './store/todolist';
+import task from '../../store/task';
+import todolist from '../../store/todolist';
+import { FilterType } from '../App';
 
 type TReturnUseApp = {
   changeTodolistFilter: (value: FilterType, todolistId: string) => void;

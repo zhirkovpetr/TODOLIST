@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
@@ -8,27 +8,26 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { observer } from 'mobx-react-lite';
 
-import { AddItemForm } from './AddItemForm';
-import task from './store/task';
-import todolist from './store/todolist';
-import { TaskType, Todolist } from './Todolist';
-import { useApp } from './useApp';
+import { AddItemForm } from '../addItemForm/AddItemForm';
+import task from '../store/task';
+import todolist from '../store/todolist';
+import { TaskType, Todolist } from '../todolist/Todolist';
+
+import { useApp } from './hooks/useApp';
 
 import './App.css';
 
 export type FilterType = 'All' | 'Active' | 'Completed';
-
-export type TodolistType = {
-  id: string;
-  title: string;
-  filter: FilterType;
-};
 
 export type TaskStateType = {
   [todolistId: string]: TaskType[];
 };
 
 export const App: React.FC = observer(() => {
+  useEffect(() => {
+    todolist.setTodolists();
+  }, []);
+
   const {
     changeTodolistFilter,
     deleteTask,

@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback } from 'react';
 
-import { TaskType } from './Todolist';
+import { TaskType } from '../../todolist/Todolist';
 
 type TUseTaskProps = {
   task: TaskType;

@@ -5,13 +5,14 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { observer } from 'mobx-react-lite';
 
-import { AddItemForm } from './AddItemForm';
-import { FilterType } from './App';
-import { EditSpan } from './EditSpan';
-import { Task } from './Task';
-import { useTodolist } from './useTodolist';
+import { AddItemForm } from '../addItemForm/AddItemForm';
+import { FilterType } from '../app/App';
+import { EditSpan } from '../editSpan/EditSpan';
+/* import { Task } from '../task/Task'; */
 
-import './App.css';
+import { useTodolist } from './hooks/useTodolist';
+
+import '../app/App.css';
 
 export type TaskType = {
   id: string;
@@ -37,15 +38,15 @@ export const Todolist: React.FC<TodolistPropsType> = memo(
   observer(props => {
     const {
       title,
-      tasks,
+      /* tasks, */
       addTask,
-      deleteTask,
+      /* deleteTask, */
       changeTodolistFilter,
-      changeTaskStatus,
+      /* changeTaskStatus, */
       filter,
       todolistId,
       deleteTodolist,
-      changeTaskTitle,
+      /* changeTaskTitle, */
       changeTodolistTitle,
     } = props;
 
@@ -56,16 +57,16 @@ export const Todolist: React.FC<TodolistPropsType> = memo(
       onDeleteTodolistHandler,
     } = useTodolist({ changeTodolistFilter, deleteTodolist, todolistId });
 
-    let resultTasks = tasks;
+    /*    let resultTasks = tasks;
 
     if (filter === 'Active') {
       resultTasks = tasks.filter(t => !t.isDone);
     }
     if (filter === 'Completed') {
       resultTasks = tasks.filter(t => t.isDone);
-    }
+    } */
 
-    const mapped = resultTasks.map(t => (
+    /*    const mapped = resultTasks.map(t => (
       <Task
         key={t.id}
         task={t}
@@ -74,7 +75,7 @@ export const Todolist: React.FC<TodolistPropsType> = memo(
         deleteTask={deleteTask}
         todolistId={todolistId}
       />
-    ));
+    )); */
 
     const addTaskHandler = useCallback(
       (newTaskTitle: string): void => {
@@ -104,7 +105,7 @@ export const Todolist: React.FC<TodolistPropsType> = memo(
             </IconButton>
           </h3>
           <AddItemForm addItem={addTaskHandler} />
-          <ul>{mapped}</ul>
+          {/* <ul>{mapped}</ul> */}
           <div>
             <Button
               variant={filter === 'All' ? 'contained' : 'text'}

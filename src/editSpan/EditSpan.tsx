@@ -2,7 +2,7 @@ import React, { memo, useState } from 'react';
 
 import TextField from '@mui/material/TextField';
 
-import { useEditSpan } from './useEditSpan';
+import { useEditSpan } from './hooks/useEditSpan';
 
 type EditSpanPropsType = {
   title: string;

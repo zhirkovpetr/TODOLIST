@@ -1,19 +1,24 @@
-import { makeAutoObservable } from 'mobx';
+import { action, makeAutoObservable, observable } from 'mobx';
 
-import { FilterType, TodolistType } from '../App';
+import { fetchTodolists, TResponseTodolist } from '../api/todolists';
+import { FilterType } from '../app/App';
+
+export type TodolistType = TResponseTodolist & {
+  filter: FilterType;
+};
 
 class Todolist {
   todolistId1 = crypto.randomUUID();
 
   todolistId2 = crypto.randomUUID();
 
-  initialState: Array<TodolistType> = [
-    { id: this.todolistId1, title: 'What to learn', filter: 'All' },
-    { id: this.todolistId2, title: 'What to buy', filter: 'All' },
-  ];
+  initialState: Array<TodolistType> = [];
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      initialState: observable,
+      setTodolists: action,
+    });
   }
 
   changeTodolistFilter(filterValue: FilterType, todolistId: string): void {
@@ -37,10 +42,23 @@ class Todolist {
       {
         id: todolistId,
         title,
+        addedDate: new Date().toISOString(),
+        order: -111,
         filter: 'All',
       },
       ...this.initialState,
     ];
+  }
+
+  async setTodolists(): Promise<TResponseTodolist[]> {
+    try {
+      const res = await fetchTodolists.getTodolists();
+      this.initialState = res.data.map(t => ({ ...t, filter: 'All' }));
+      return this.initialState;
+    } catch (error) {
+      console.log(error);
+      return this.initialState;
+    }
   }
 }
 

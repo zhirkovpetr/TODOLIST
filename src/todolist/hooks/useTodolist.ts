@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { FilterType } from './App';
+import { FilterType } from '../../app/App';
 
 type TUseTodolistProps = {
   changeTodolistFilter: (value: FilterType, todolistId: string) => void;

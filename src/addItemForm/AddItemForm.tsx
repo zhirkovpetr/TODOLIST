@@ -4,7 +4,7 @@ import { ControlPoint } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 
-import { useAddItemForm } from './useAddItemForm';
+import { useAddItemForm } from './hooks/useAddItemForm';
 
 export type AddItemFormPropsType = {
   addItem: (title: string) => void;
