@@ -86,7 +86,7 @@ export const Todolist: React.FC<TodolistPropsType> = memo(
 
     const onChangeTodolistTitle = useCallback(
       (newTodolistTitle: string): void => {
-        changeTodolistTitle(newTodolistTitle, todolistId);
+        changeTodolistTitle(todolistId, newTodolistTitle);
       },
       [changeTodolistTitle, todolistId],
     );

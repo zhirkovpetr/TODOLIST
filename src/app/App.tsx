@@ -25,7 +25,7 @@ export type TaskStateType = {
 
 export const App: React.FC = observer(() => {
   useEffect(() => {
-    todolist.setTodolists();
+    todolist.setTodolists().then(res => res);
   }, []);
 
   const {

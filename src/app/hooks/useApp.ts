@@ -28,7 +28,7 @@ export const useApp = (): TReturnUseApp => {
   }, []);
 
   const removeTodolist = useCallback((todolistId: string): void => {
-    todolist.removeTodolist(todolistId);
+    todolist.deleteTodolist(todolistId).then(r => r);
   }, []);
 
   const addTask = useCallback((title: string, todolistId: string): void => {
@@ -43,13 +43,14 @@ export const useApp = (): TReturnUseApp => {
   );
 
   const addTodolistHandler = useCallback((title: string): void => {
+    todolist.createTodolist(title).then(res => res);
     const todolistId = crypto.randomUUID();
-    todolist.addTodolist(title, todolistId);
+    // todolist.addTodolist(title, todolistId);
     task.addTaskForTodolist(todolistId);
   }, []);
 
   const changeTodolistTitle = useCallback((title: string, todolistId: string): void => {
-    todolist.changeTodolistTitle(title, todolistId);
+    todolist.changeTodolistTitle(title, todolistId).then(r => r);
   }, []);
 
   const changeTaskTitle = useCallback(
