@@ -1,39 +1,59 @@
-import React, { memo } from 'react';
+import React, { ChangeEvent } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
+import { observer } from 'mobx-react-lite';
 
+import { TaskPriorities, TaskStatuses, TTask } from '../api/tasks-api';
 import { EditSpan } from '../editSpan/EditSpan';
-import { TaskType } from '../todolist/Todolist';
-
-import { useTask } from './hooks/useTask';
+import taskStore from '../stores/task-store';
 
 type TTaskProps = {
-  task: TaskType;
-  todolistId: string;
-  deleteTask: (deleteTask: string, todolistId: string) => void;
-  changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void;
-  changeTaskTitle: (taskId: string, title: string, todolistId: string) => void;
+  task: TTask;
 };
 
-export const Task: React.FC<TTaskProps> = memo(props => {
-  const { task, todolistId, deleteTask, changeTaskStatus, changeTaskTitle } = props;
+export const Task: React.FC<TTaskProps> = observer(({ task }) => {
+  const { todoListId, id } = task;
 
-  const { deleteTaskHandler, onChangeStatusHandler, onChangeTaskTitle } = useTask({
-    task,
-    todolistId,
-    deleteTask,
-    changeTaskStatus,
-    changeTaskTitle,
-  });
+  const taskModel = {
+    title: task.title,
+    status: task.status,
+    deadline: task.deadline,
+    description: task.description,
+    priority: TaskPriorities.Low,
+    startDate: task.startDate,
+  };
+
+  const deleteTask = (): void => {
+    taskStore.deleteTask(todoListId, id);
+  };
+
+  const onChangeTaskTitle = (newTitle: string): void => {
+    taskStore.updateTask(todoListId, { ...taskModel, title: newTitle }, id);
+  };
+
+  const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>): void => {
+    taskStore.updateTask(
+      id,
+      {
+        ...taskModel,
+        status: e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New,
+      },
+      todoListId,
+    );
+  };
 
   return (
-    <div className={task.isDone ? 'is-done' : ''}>
+    <div className={task.completed ? 'is-done' : ''}>
       <li>
-        <Checkbox checked={task.isDone} onChange={onChangeStatusHandler} size="small" />
+        <Checkbox
+          checked={task.completed}
+          onChange={onChangeStatusHandler}
+          size="small"
+        />
         <EditSpan title={task.title} onChangeTitle={onChangeTaskTitle} />
-        <IconButton onClick={deleteTaskHandler} aria-label="delete" size="small">
+        <IconButton onClick={deleteTask} aria-label="delete" size="small">
           <DeleteIcon fontSize="small" />
         </IconButton>
       </li>

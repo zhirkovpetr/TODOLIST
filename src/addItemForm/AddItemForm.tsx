@@ -33,6 +33,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo(props => {
         onChange={onChangeTaskHandler}
         onKeyPress={onKeyPressHandler}
         helperText={inputError && 'Field is required'}
+        autoComplete="off"
       />
       <IconButton color="primary" onClick={onAddTaskHandler}>
         <ControlPoint />

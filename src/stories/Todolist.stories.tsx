@@ -1,3 +1,7 @@
+export default {};
+export const foo = (): void => {};
+/*
+
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Todolist } from '../todolist/Todolist';
@@ -51,3 +55,4 @@ export default meta;
 type Story = StoryObj<typeof Todolist>;
 
 export const TodolistStory: Story = {};
+*/

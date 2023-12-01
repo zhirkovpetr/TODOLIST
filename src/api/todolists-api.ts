@@ -26,7 +26,7 @@ type TItem = {
 
 export const fetchTodolists = {
   getTodolists() {
-    return instance.get<TResponseTodolist[]>('todo-lists');
+    return instance.get<TResponseTodolist[]>('todo-lists').then(res => res.data);
   },
   createTodolist(title: string) {
     return instance.post<TResponse<TData>>('todo-lists', { title }).then(res => res.data);
