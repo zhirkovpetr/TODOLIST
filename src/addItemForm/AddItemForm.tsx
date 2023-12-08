@@ -1,10 +1,12 @@
-import React, { ChangeEvent, KeyboardEvent, memo, useState } from 'react';
+import React, { memo, useState } from 'react';
 
 import { ControlPoint } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 
-type AddItemFormPropsType = {
+import { useAddItemForm } from './hooks/useAddItemForm';
+
+export type AddItemFormPropsType = {
   addItem: (title: string) => void;
 };
 
@@ -13,30 +15,12 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo(props => {
   const [titleInput, setTitleInput] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
 
-  const onChangeTaskHandler = (e: ChangeEvent<HTMLInputElement>): void => {
-    if (e.currentTarget.value.trim()) {
-      setInputError(false);
-    } else {
-      setInputError(true);
-    }
-    setTitleInput(e.currentTarget.value);
-  };
-
-  const onAddTaskHandler = (): void => {
-    const trimmedTitle = titleInput.trim();
-    if (trimmedTitle) {
-      addItem(trimmedTitle);
-    } else {
-      setInputError(true);
-    }
-    setTitleInput('');
-  };
-
-  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === 'Enter') {
-      onAddTaskHandler();
-    }
-  };
+  const { onChangeTaskHandler, onAddTaskHandler, onKeyPressHandler } = useAddItemForm({
+    addItem,
+    titleInput,
+    setTitleInput,
+    setInputError,
+  });
 
   return (
     <div>
@@ -49,6 +33,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo(props => {
         onChange={onChangeTaskHandler}
         onKeyPress={onKeyPressHandler}
         helperText={inputError && 'Field is required'}
+        autoComplete="off"
       />
       <IconButton color="primary" onClick={onAddTaskHandler}>
         <ControlPoint />
