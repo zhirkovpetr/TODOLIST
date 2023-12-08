@@ -1,12 +1,12 @@
 import { ChangeEvent, useCallback } from 'react';
 
-import { TaskType } from '../../todolist/Todolist';
+import { TaskStatuses, TTask } from '../../api/tasks-api';
 
 type TUseTaskProps = {
-  task: TaskType;
+  task: TTask;
   todolistId: string;
   deleteTask: (deleteTask: string, todolistId: string) => void;
-  changeTaskStatus: (taskId: string, isDone: boolean, todolistId: string) => void;
+  changeTaskStatus: (taskId: string, status: TaskStatuses, todolistId: string) => void;
   changeTaskTitle: (taskId: string, title: string, todolistId: string) => void;
 };
 
@@ -24,7 +24,11 @@ export const useTask = (props: TUseTaskProps): TReturnUseTask => {
   };
 
   const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>): void => {
-    changeTaskStatus(task.id, e.currentTarget.checked, todolistId);
+    changeTaskStatus(
+      task.id,
+      e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New,
+      todolistId,
+    );
   };
 
   const onChangeTaskTitle = useCallback(

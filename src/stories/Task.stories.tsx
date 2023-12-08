@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+export default {};
+export const foo = (): void => {};
 
-import { action } from '@storybook/addon-actions';
+/* import React, { useState } from 'react'; */
+/* import { action } from '@storybook/addon-actions';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { TaskStatuses } from '../api/tasks-api';
 import { Task } from '../task/Task';
 
-const meta: Meta<typeof Task> = {
+export default {}; */
+
+/* const meta: Meta<typeof Task> = {
   title: 'TODOLIST/Task',
   component: Task,
   parameters: {
@@ -27,34 +32,39 @@ const meta: Meta<typeof Task> = {
     },
   },
   args: {
-    task: { id: crypto.randomUUID(), title: 'new task', isDone: true },
+    task: { id: crypto.randomUUID(), title: 'new task', status: TaskStatuses.Completed },
     todolistId: crypto.randomUUID(),
   },
 };
 
-export default meta;
-type Story = StoryObj<typeof Task>;
+export default meta; */
+/* type Story = StoryObj<typeof Task>; */
 
-export const TaskIsDoneStory: Story = {};
+/* export const TaskIsDoneStory: Story = {}; */
 
-export const TaskIsNotDoneStory: Story = {
+/* export const TaskIsNotDoneStory: Story = {
   args: {
-    task: { id: crypto.randomUUID(), title: 'new task', isDone: false },
+    task: { id: crypto.randomUUID(), title: 'new task', status: TaskStatuses.New },
   },
-};
+}; */
 
-const ToggleTask: React.FC = () => {
+/* const ToggleTask: React.FC = () => {
   const [task, setTask] = useState({
     id: crypto.randomUUID(),
     title: 'new task',
-    isDone: false,
+    status: TaskStatuses.New,
   });
 
   return (
     <Task
       task={task}
       todolistId={crypto.randomUUID()}
-      changeTaskStatus={() => setTask({ ...task, isDone: !task.isDone })}
+      changeTaskStatus={() =>
+        setTask({
+          ...task,
+          status: task.status ? TaskStatuses.Completed : TaskStatuses.New,
+        })
+      }
       changeTaskTitle={newTitle => setTask({ ...task, title: newTitle })}
       deleteTask={action('removeTask')}
     />
@@ -63,4 +73,4 @@ const ToggleTask: React.FC = () => {
 
 export const ToggleTaskStory: Story = {
   render: () => <ToggleTask />,
-};
+}; */
