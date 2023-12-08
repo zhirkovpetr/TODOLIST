@@ -35,12 +35,12 @@ export const Task: React.FC<TTaskProps> = observer(({ task }) => {
 
   const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>): void => {
     taskStore.updateTask(
-      id,
+      todoListId,
       {
         ...taskModel,
         status: e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New,
       },
-      todoListId,
+      id,
     );
   };
 
@@ -48,7 +48,7 @@ export const Task: React.FC<TTaskProps> = observer(({ task }) => {
     <div className={task.completed ? 'is-done' : ''}>
       <li>
         <Checkbox
-          checked={task.completed}
+          checked={task.status !== TaskStatuses.New}
           onChange={onChangeStatusHandler}
           size="small"
         />

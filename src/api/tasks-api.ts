@@ -25,7 +25,7 @@ export type TTask = {
 };
 
 export type UpdateDomainTaskModelType = {
-  title?: string;
+  title: string;
   description?: string;
   status?: TaskStatuses;
   completed?: boolean;
