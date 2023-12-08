@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { fetchTodolists, TResponseTodolist } from '../api/todolists-api';
-import { FilterType } from '../app/App';
+import { FilterType } from '../components/app/App';
 
 export type TodolistType = TResponseTodolist & {
   filter: FilterType;

@@ -1,8 +1,6 @@
-import React, { memo, useState } from 'react';
+import React, { ChangeEvent, memo, useState } from 'react';
 
 import TextField from '@mui/material/TextField';
-
-import { useEditSpan } from './hooks/useEditSpan';
 
 type EditSpanPropsType = {
   title: string;
@@ -15,13 +13,18 @@ export const EditSpan: React.FC<EditSpanPropsType> = memo(props => {
   const [editMode, setEditMode] = useState(false);
   const [newTitle, setNewTitle] = useState('');
 
-  const { onChangeHandler, activateEditMode, activateViewMode } = useEditSpan({
-    title,
-    newTitle,
-    onChangeTitle,
-    setEditMode,
-    setNewTitle,
-  });
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
+    setNewTitle(e.currentTarget.value);
+  };
+
+  const activateEditMode = (): void => {
+    setEditMode(true);
+    setNewTitle(title);
+  };
+  const activateViewMode = (): void => {
+    setEditMode(false);
+    onChangeTitle(newTitle);
+  };
 
   return editMode ? (
     <TextField

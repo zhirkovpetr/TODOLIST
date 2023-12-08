@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
@@ -8,9 +8,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { observer } from 'mobx-react-lite';
 
-import { AddItemForm } from '../addItemForm/AddItemForm';
-import TodolistStore from '../stores/todolist-store';
-import { Todolist } from '../todolist/Todolist';
+import TodolistStore from '../../stores/todolist-store';
+import { AddItemForm } from '../addItemForm';
+import { Todolist } from '../todolist';
 
 import './App.css';
 
@@ -21,9 +21,9 @@ type TApp = {
 };
 
 export const App: React.FC<TApp> = observer(({ todolistsStore }) => {
-  const addTodolistHandler = (title: string): void => {
+  const addTodolistHandler = useCallback((title: string): void => {
     todolistsStore.createTodolist(title);
-  };
+  }, []);
 
   return (
     <div className="todolist-block">
