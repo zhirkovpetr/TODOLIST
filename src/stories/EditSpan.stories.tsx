@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { EditSpan } from '../editSpan/EditSpan';
+import { EditSpan } from '../components/editSpan';
 
 const meta: Meta<typeof EditSpan> = {
   title: 'TODOLIST/EditSpan',

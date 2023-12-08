@@ -1,76 +1,91 @@
-export default {};
-export const foo = (): void => {};
+import { ReactElement, useEffect, useState } from 'react';
 
-/* import React, { useState } from 'react'; */
-/* import { action } from '@storybook/addon-actions';
-import type { Meta, StoryObj } from '@storybook/react';
+import { fetchTask } from '../api/tasks-api';
 
-import { TaskStatuses } from '../api/tasks-api';
-import { Task } from '../task/Task';
-
-export default {}; */
-
-/* const meta: Meta<typeof Task> = {
-  title: 'TODOLIST/Task',
-  component: Task,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
-  argTypes: {
-    deleteTask: {
-      description: 'Clicked button delete task',
-      action: 'clicked',
-    },
-    changeTaskStatus: {
-      description: 'Clicked button change task status',
-      action: 'clicked',
-    },
-    changeTaskTitle: {
-      description: 'Double clicked button change task title',
-      action: 'clicked',
-    },
-  },
-  args: {
-    task: { id: crypto.randomUUID(), title: 'new task', status: TaskStatuses.Completed },
-    todolistId: crypto.randomUUID(),
-  },
+export default {
+  title: 'API-TASK',
 };
 
-export default meta; */
-/* type Story = StoryObj<typeof Task>; */
-
-/* export const TaskIsDoneStory: Story = {}; */
-
-/* export const TaskIsNotDoneStory: Story = {
-  args: {
-    task: { id: crypto.randomUUID(), title: 'new task', status: TaskStatuses.New },
-  },
-}; */
-
-/* const ToggleTask: React.FC = () => {
-  const [task, setTask] = useState({
-    id: crypto.randomUUID(),
-    title: 'new task',
-    status: TaskStatuses.New,
-  });
-
-  return (
-    <Task
-      task={task}
-      todolistId={crypto.randomUUID()}
-      changeTaskStatus={() =>
-        setTask({
-          ...task,
-          status: task.status ? TaskStatuses.Completed : TaskStatuses.New,
-        })
+export const GetTasks = (): ReactElement => {
+  const [state, setState] = useState<any>({});
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      try {
+        const todolistId = '50315a27-c976-46d0-b82a-121df8388d2d';
+        const data = await fetchTask.getTasks(todolistId);
+        setState({ [todolistId]: data.items });
+      } catch (error) {
+        console.error(`Error: ${error}`);
       }
-      changeTaskTitle={newTitle => setTask({ ...task, title: newTitle })}
-      deleteTask={action('removeTask')}
-    />
-  );
+    };
+    fetchData().catch(error => {
+      console.error(`Error in fetchData: ${error}`);
+    });
+  }, []);
+
+  return <div>{JSON.stringify(state)}</div>;
 };
 
-export const ToggleTaskStory: Story = {
-  render: () => <ToggleTask />,
-}; */
+export const CreateTask = (): ReactElement => {
+  const [state, setState] = useState<any>({});
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      try {
+        const todolistId = '50315a27-c976-46d0-b82a-121df8388d2d';
+        const title = 'Task';
+        const data = await fetchTask.createTask(todolistId, title);
+        setState({ [todolistId]: data.data.item });
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    };
+    fetchData().catch(error => {
+      console.error(`Error in fetchData: ${error}`);
+    });
+  }, []);
+
+  return <div>{JSON.stringify(state)}</div>;
+};
+
+export const DeleteTask = (): ReactElement => {
+  const [state, setState] = useState<any>(null);
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      try {
+        const todolistId = '50315a27-c976-46d0-b82a-121df8388d2d';
+        const taskId = '944c757b-5550-4a6e-bf3a-07b6e7736718';
+        const res = await fetchTask.deleteTask(todolistId, taskId);
+        setState(res.data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    };
+    fetchData().catch(error => {
+      console.error(`Error in fetchData: ${error}`);
+    });
+  }, []);
+
+  return <div>{JSON.stringify(state)}</div>;
+};
+
+export const UpdateTask = (): ReactElement => {
+  const [state, setState] = useState<any>(null);
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      try {
+        const title = 'New Task';
+        const taskId = '944c757b-5550-4a6e-bf3a-07b6e7736718';
+        const todolistId = '50315a27-c976-46d0-b82a-121df8388d2d';
+        const res = await fetchTask.updateTask(todolistId, { title }, taskId);
+        setState(res.data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    };
+    fetchData().catch(error => {
+      console.error(`Error in fetchData: ${error}`);
+    });
+  }, []);
+
+  return <div>{JSON.stringify(state)}</div>;
+};

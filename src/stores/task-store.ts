@@ -59,11 +59,12 @@ class TaskStore {
     try {
       await fetchTask.updateTask(todolistId, domainModel, taskId);
       runInAction(() => {
-        const tasks = this.tasks[todolistId];
-        const index = tasks.findIndex(t => t.id === taskId);
-        if (index > -1) {
-          tasks[index] = { ...tasks[index], ...domainModel };
-        }
+        this.tasks = {
+          ...this.tasks,
+          [todolistId]: this.tasks[todolistId].map(t =>
+            t.id === taskId ? { ...t, ...domainModel } : t,
+          ),
+        };
       });
     } catch (error) {
       console.log(error);

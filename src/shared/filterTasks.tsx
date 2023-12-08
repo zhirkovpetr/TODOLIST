@@ -1,5 +1,5 @@
 import { TaskStatuses, TTask } from '../api/tasks-api';
-import { FilterType } from '../app/App';
+import { FilterType } from '../components/app/App';
 
 export const filterTasks = (tasks: TTask[], filter: FilterType): TTask[] => {
   let resultTasks = tasks || [];

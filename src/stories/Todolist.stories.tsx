@@ -1,58 +1,84 @@
-export default {};
-export const foo = (): void => {};
-/*
+import { ReactElement, useEffect, useState } from 'react';
 
-import type { Meta, StoryObj } from '@storybook/react';
+import { fetchTodolists, TResponseTodolist } from '../api/todolists-api';
 
-import { Todolist } from '../todolist/Todolist';
-
-const meta: Meta<typeof Todolist> = {
-  title: 'TODOLIST/Todolist',
-  component: Todolist,
-  parameters: {
-    layout: 'centered',
-  },
-  tags: ['autodocs'],
-  argTypes: {
-    deleteTask: {
-      description: 'Clicked button delete task',
-      action: 'clicked',
-    },
-    changeTaskStatus: {
-      description: 'Clicked button change task status',
-      action: 'clicked',
-    },
-    changeTaskTitle: {
-      description: 'Double clicked button change task title',
-      action: 'clicked',
-    },
-    deleteTodolist: {
-      description: 'Double clicked button delete todolist',
-      action: 'clicked',
-    },
-    changeTodolistFilter: {
-      description: 'Double clicked button change todolist filter',
-      action: 'clicked',
-    },
-    addTask: {
-      description: 'Double clicked button add task',
-      action: 'clicked',
-    },
-    changeTodolistTitle: {
-      description: 'Double clicked button change todolist title',
-      action: 'clicked',
-    },
-  },
-  args: {
-    title: 'todolist title',
-    todolistId: crypto.randomUUID(),
-    tasks: [],
-    filter: 'All',
-  },
+export default {
+  title: 'API-TODOLIST',
 };
 
-export default meta;
-type Story = StoryObj<typeof Todolist>;
+export const GetTodolists = (): ReactElement => {
+  const [state, setState] = useState<TResponseTodolist[]>([]);
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      try {
+        const data = await fetchTodolists.getTodolists();
+        setState(data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    };
+    fetchData().catch(error => {
+      console.error(`Error in fetchData: ${error}`);
+    });
+  }, []);
 
-export const TodolistStory: Story = {};
-*/
+  return <div>{JSON.stringify(state)}</div>;
+};
+export const CreateTodolist = (): ReactElement => {
+  const [state, setState] = useState<any>(null);
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      try {
+        const title = 'React';
+        const res = await fetchTodolists.createTodolist(title);
+        setState(res.data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    };
+    fetchData().catch(error => {
+      console.error(`Error in fetchData: ${error}`);
+    });
+  }, []);
+
+  return <div>{JSON.stringify(state)}</div>;
+};
+export const DeleteTodolist = (): ReactElement => {
+  const [state, setState] = useState<any>(null);
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      try {
+        const todolistId = '60ab809b-d69c-484f-90ce-7f10372b34bd';
+        const res = await fetchTodolists.deleteTodolist(todolistId);
+        setState(res.data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    };
+    fetchData().catch(error => {
+      console.error(`Error in fetchData: ${error}`);
+    });
+  }, []);
+
+  return <div>{JSON.stringify(state)}</div>;
+};
+export const UpdateTodolistTitle = (): ReactElement => {
+  const [state, setState] = useState<any>(null);
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      try {
+        const todolistId = 'b028a134-7b53-404a-b41a-635d20c194e7';
+        const title = 'New React';
+        const res = await fetchTodolists.updateTodolistTitle(todolistId, title);
+        setState(res.data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    };
+    fetchData().catch(error => {
+      console.error(`Error in fetchData: ${error}`);
+    });
+  }, []);
+
+  return <div>{JSON.stringify(state)}</div>;
+};

@@ -5,12 +5,12 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { observer } from 'mobx-react-lite';
 
-import { AddItemForm } from '../addItemForm/AddItemForm';
-import { EditSpan } from '../editSpan/EditSpan';
-import { filterTasks } from '../shared/filterTasks';
-import taskStore from '../stores/task-store';
-import TodolistStore, { TodolistType } from '../stores/todolist-store';
-import { Task } from '../task/Task';
+import { filterTasks } from '../../shared/filterTasks';
+import taskStore from '../../stores/task-store';
+import TodolistStore, { TodolistType } from '../../stores/todolist-store';
+import { AddItemForm } from '../addItemForm';
+import { EditSpan } from '../editSpan';
+import { Task } from '../task';
 import '../app/App.css';
 
 type TodolistPropsType = {

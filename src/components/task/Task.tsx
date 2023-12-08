@@ -5,9 +5,9 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import { observer } from 'mobx-react-lite';
 
-import { TaskPriorities, TaskStatuses, TTask } from '../api/tasks-api';
-import { EditSpan } from '../editSpan/EditSpan';
-import taskStore from '../stores/task-store';
+import { TaskPriorities, TaskStatuses, TTask } from '../../api/tasks-api';
+import { taskStore } from '../../stores';
+import { EditSpan } from '../editSpan';
 
 type TTaskProps = {
   task: TTask;
@@ -45,7 +45,7 @@ export const Task: React.FC<TTaskProps> = observer(({ task }) => {
   };
 
   return (
-    <div className={task.completed ? 'is-done' : ''}>
+    <div className={task.status === TaskStatuses.Completed ? 'is-done' : ''}>
       <li>
         <Checkbox
           checked={task.status !== TaskStatuses.New}
