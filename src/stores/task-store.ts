@@ -2,6 +2,8 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import { fetchTask, TasksStateType, UpdateDomainTaskModelType } from '../api/tasks-api';
 
+import { appStore } from './index';
+
 class TaskStore {
   tasks: TasksStateType = {};
 
@@ -10,6 +12,7 @@ class TaskStore {
   }
 
   async setTasks(todolistId: string): Promise<void> {
+    appStore.status = 'loading';
     try {
       const data = await fetchTask.getTasks(todolistId);
       runInAction(() => {
@@ -20,20 +23,38 @@ class TaskStore {
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      runInAction(() => {
+        appStore.status = 'succeeded';
+      });
     }
   }
 
   async createTask(todolistId: string, title: string): Promise<void> {
+    appStore.status = 'loading';
     try {
       const data = await fetchTask.createTask(todolistId, title);
-      runInAction(() => {
-        this.tasks = {
-          ...this.tasks,
-          [todolistId]: [data.data.item, ...this.tasks[todolistId]],
-        };
-      });
+      if (data.resultCode === 0) {
+        runInAction(() => {
+          this.tasks = {
+            ...this.tasks,
+            [todolistId]: [data.data.item, ...this.tasks[todolistId]],
+          };
+        });
+      } else if (data.messages.length) {
+        appStore.setError(data.messages[0]);
+      } else {
+        appStore.setError('some error occurred!');
+      }
     } catch (error) {
+      runInAction(() => {
+        appStore.status = 'failed';
+      });
       console.log(error);
+    } finally {
+      runInAction(() => {
+        appStore.status = 'succeeded';
+      });
     }
   }
 
