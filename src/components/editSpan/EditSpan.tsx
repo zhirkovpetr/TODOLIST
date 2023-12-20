@@ -5,10 +5,11 @@ import TextField from '@mui/material/TextField';
 type EditSpanPropsType = {
   title: string;
   onChangeTitle: (newTitle: string) => void;
+  disabled?: boolean;
 };
 
 export const EditSpan: React.FC<EditSpanPropsType> = memo(props => {
-  const { title, onChangeTitle } = props;
+  const { title, onChangeTitle, disabled } = props;
 
   const [editMode, setEditMode] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -34,6 +35,7 @@ export const EditSpan: React.FC<EditSpanPropsType> = memo(props => {
       onBlur={activateViewMode}
       onChange={onChangeHandler}
       autoFocus
+      disabled={disabled}
     />
   ) : (
     <span onDoubleClick={activateEditMode}>{title}</span>
