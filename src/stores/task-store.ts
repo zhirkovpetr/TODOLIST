@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
 import { fetchTask, TasksStateType, UpdateDomainTaskModelType } from '../api/tasks-api';
+import { handleServerAppError, handleServerNetworkError } from '../shared/error-tils';
 
 import { appStore } from './index';
 
@@ -41,16 +42,11 @@ class TaskStore {
             [todolistId]: [data.data.item, ...this.tasks[todolistId]],
           };
         });
-      } else if (data.messages.length) {
-        appStore.setError(data.messages[0]);
       } else {
-        appStore.setError('some error occurred!');
+        handleServerAppError(data);
       }
     } catch (error) {
-      runInAction(() => {
-        appStore.status = 'failed';
-      });
-      console.log(error);
+      runInAction(() => handleServerNetworkError(error as Error | null));
     } finally {
       runInAction(() => {
         appStore.status = 'succeeded';
@@ -78,17 +74,28 @@ class TaskStore {
     taskId: string,
   ): Promise<void> {
     try {
-      await fetchTask.updateTask(todolistId, domainModel, taskId);
-      runInAction(() => {
-        this.tasks = {
-          ...this.tasks,
-          [todolistId]: this.tasks[todolistId].map(t =>
-            t.id === taskId ? { ...t, ...domainModel } : t,
-          ),
-        };
-      });
+      const data = await fetchTask.updateTask(todolistId, domainModel, taskId);
+      if (data.resultCode === 0) {
+        runInAction(() => {
+          this.tasks = {
+            ...this.tasks,
+            [todolistId]: this.tasks[todolistId].map(t =>
+              t.id === taskId ? { ...t, ...domainModel } : t,
+            ),
+          };
+        });
+      } else {
+        handleServerAppError(data);
+      }
     } catch (error) {
-      console.log(error);
+      runInAction(() => {
+        appStore.status = 'failed';
+        if (error instanceof Error) {
+          appStore.setError(error.message);
+        } else {
+          appStore.setError('Failed to do something exceptional');
+        }
+      });
     }
   }
 }
