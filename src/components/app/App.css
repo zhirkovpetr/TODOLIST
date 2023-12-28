@@ -21,3 +21,16 @@ ul {
 .is-done {
   opacity: 0.5;
 }
+
+a{
+  color: #bd9292;
+  text-decoration: none;
+}
+
+a.active{
+  color: rgba(190, 0, 0, 0.48);
+}
+
+a:hover{
+  color: rgb(255, 255, 255);
+}

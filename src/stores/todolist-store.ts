@@ -93,4 +93,4 @@ class TodolistStore {
   }
 }
 
-export default TodolistStore;
+export default new TodolistStore();

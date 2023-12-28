@@ -1,26 +1,30 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { observer } from 'mobx-react-lite';
 
-import TodolistStore from '../../stores/todolist-store';
+import { todolistsStore } from '../../stores';
+import { AddItemForm } from '../addItemForm';
 import { Todolist } from '../todolist';
 
-type TTodolistsListProps = {
-  todolistsStore: TodolistStore;
-};
+export const TodolistsList: React.FC = observer(() => {
+  const addTodolistHandler = useCallback((title: string): void => {
+    todolistsStore.createTodolist(title);
+  }, []);
 
-export const TodolistsList: React.FC<TTodolistsListProps> = observer(
-  ({ todolistsStore }) => (
+  return (
     <>
+      <Grid container style={{ padding: '10px' }}>
+        <AddItemForm addItem={addTodolistHandler} />
+      </Grid>
       {todolistsStore.todolists.map(todo => (
         <Grid item key={todo.id}>
           <Paper style={{ padding: '15px' }}>
-            <Todolist todolist={todo} todolistsStore={todolistsStore} />
+            <Todolist todolist={todo} />
           </Paper>
         </Grid>
       ))}
     </>
-  ),
-);
+  );
+});
