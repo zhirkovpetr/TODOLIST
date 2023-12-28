@@ -6,20 +6,20 @@ import IconButton from '@mui/material/IconButton';
 import { observer } from 'mobx-react-lite';
 
 import { filterTasks } from '../../shared/filterTasks';
-import taskStore from '../../stores/task-store';
-import TodolistStore, { TodolistType } from '../../stores/todolist-store';
+import { taskStore, todolistsStore } from '../../stores';
+import { TodolistType } from '../../stores/todolist-store';
 import { AddItemForm } from '../addItemForm';
 import { EditSpan } from '../editSpan';
 import { Task } from '../task';
+
 import '../app/App.css';
 
 type TodolistPropsType = {
   todolist: TodolistType;
-  todolistsStore: TodolistStore;
 };
 
 export const Todolist: React.FC<TodolistPropsType> = observer(props => {
-  const { todolist, todolistsStore } = props;
+  const { todolist } = props;
   const { id, filter, title } = todolist;
 
   useEffect(() => {
