@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import { observer } from 'mobx-react-lite';
 import { Outlet } from 'react-router-dom';
 
@@ -15,9 +14,7 @@ export const App: React.FC = observer(() => (
   <div className="todolist-block">
     <GlobalHeader />
     <Container fixed>
-      <Grid container spacing={10}>
-        <Outlet />
-      </Grid>
+      <Outlet />
     </Container>
   </div>
 ));

@@ -15,16 +15,20 @@ export const TodolistsList: React.FC = observer(() => {
 
   return (
     <>
-      <Grid container style={{ padding: '10px' }}>
-        <AddItemForm addItem={addTodolistHandler} />
+      <Grid container style={{ padding: '10px 0' }}>
+        <Paper style={{ padding: '15px' }}>
+          <AddItemForm addItem={addTodolistHandler} />
+        </Paper>
       </Grid>
-      {todolistsStore.todolists.map(todo => (
-        <Grid item key={todo.id}>
-          <Paper style={{ padding: '15px' }}>
-            <Todolist todolist={todo} />
-          </Paper>
-        </Grid>
-      ))}
+      <Grid container spacing={10}>
+        {todolistsStore.todolists.map(todo => (
+          <Grid item key={todo.id}>
+            <Paper style={{ padding: '15px' }}>
+              <Todolist todolist={todo} />
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
     </>
   );
 });
