@@ -22,6 +22,10 @@ export const router = createBrowserRouter([
         path: ROUTERS.LOGIN,
         element: <Login />,
       },
+      {
+        path: ROUTERS.NOTFOUND,
+        element: <NotFound />,
+      },
     ],
   },
 ]);
