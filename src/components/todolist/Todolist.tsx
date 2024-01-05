@@ -52,7 +52,7 @@ export const Todolist: React.FC<TodolistPropsType> = observer(props => {
     },
     [id],
   );
-
+  console.log(todolist.isTodolistsLoading);
   return (
     <div className="App">
       <div>
@@ -62,7 +62,12 @@ export const Todolist: React.FC<TodolistPropsType> = observer(props => {
             onChangeTitle={onChangeTodolistTitle}
             disabled={todolist.isTodolistsLoading === 'loading'}
           />
-          <IconButton aria-label="delete" size="large" onClick={onDeleteTodolistHandler}>
+          <IconButton
+            aria-label="delete"
+            size="large"
+            onClick={onDeleteTodolistHandler}
+            disabled={todolist.isTodolistsLoading === 'loading'}
+          >
             <DeleteIcon />
           </IconButton>
         </h3>

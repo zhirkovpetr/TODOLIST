@@ -13,8 +13,6 @@ export type TodolistType = TResponseTodolist & {
 class TodolistStore {
   todolists: Array<TodolistType> = [];
 
-  isTodolistsLoading: 'idle' | 'loading' | 'succeeded' | 'failed' = 'idle';
-
   // taskStore: TaskStore;
 
   constructor() {
@@ -29,8 +27,16 @@ class TodolistStore {
     );
   }
 
+  changeIsTodolistsLoading(
+    isTodolistsLoading: 'idle' | 'loading' | 'succeeded' | 'failed',
+    todolistId: string,
+  ): void {
+    this.todolists = this.todolists.map(t =>
+      t.id === todolistId ? { ...t, isTodolistsLoading } : t,
+    );
+  }
+
   async setTodolists(): Promise<void> {
-    this.isTodolistsLoading = 'loading';
     appStore.status = 'loading';
     try {
       const data = await fetchTodolists.getTodolists();
@@ -45,14 +51,12 @@ class TodolistStore {
       console.log(error);
     } finally {
       runInAction(() => {
-        this.isTodolistsLoading = 'succeeded';
         appStore.status = 'succeeded';
       });
     }
   }
 
   async createTodolist(title: string): Promise<void> {
-    this.isTodolistsLoading = 'loading';
     appStore.status = 'loading';
     try {
       const { data, resultCode } = await fetchTodolists.createTodolist(title);
@@ -68,13 +72,14 @@ class TodolistStore {
       console.log(error);
     } finally {
       runInAction(() => {
-        this.isTodolistsLoading = 'succeeded';
         appStore.status = 'succeeded';
       });
     }
   }
 
   async deleteTodolist(id: string): Promise<void> {
+    this.changeIsTodolistsLoading('loading', id);
+    appStore.setStatus('loading');
     try {
       const { resultCode } = await fetchTodolists.deleteTodolist(id);
       if (resultCode === 0) {
@@ -84,10 +89,16 @@ class TodolistStore {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      runInAction(() => {
+        this.changeIsTodolistsLoading('succeeded', id);
+        appStore.setStatus('succeeded');
+      });
     }
   }
 
   async changeTodolistTitle(id: string, title: string): Promise<void> {
+    this.changeIsTodolistsLoading('loading', id);
     try {
       const { resultCode } = await fetchTodolists.updateTodolistTitle(id, title);
       if (resultCode === 0) {
@@ -97,6 +108,10 @@ class TodolistStore {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      runInAction(() => {
+        this.changeIsTodolistsLoading('succeeded', id);
+      });
     }
   }
 }
