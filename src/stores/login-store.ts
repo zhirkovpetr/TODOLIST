@@ -1,60 +1,70 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { authApi } from '../api/auth-api';
+import { authApi, LoginParamsType } from '../api/auth-api';
+import { handleServerAppError, handleServerNetworkError } from '../shared/error-tils';
+
+import { appStore } from './index';
 
 type LoginType = {
-  loginRequestStatus: 'idle' | 'pending' | 'succeeded' | 'failed';
-  data: {
-    userId?: number;
-  };
-  errorEmail?: string;
+  isLoggedIn: boolean;
+  isLoginLoading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  errorEmail: string;
 };
 
 class LoginStore {
   login: LoginType = {
-    loginRequestStatus: 'idle',
-    data: {},
+    isLoggedIn: false,
+    isLoginLoading: 'idle',
+    errorEmail: '',
   };
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  async loginUser(credentials: {
-    email: string;
-    password: string;
-    rememberMe: boolean;
-  }): Promise<void> {
-    this.login.loginRequestStatus = 'pending';
+  setIsLoggedIn(value: boolean): void {
+    this.login = {
+      ...this.login,
+      isLoggedIn: value,
+    };
+  }
+
+  async loginUser(param: LoginParamsType): Promise<void> {
+    this.login.isLoginLoading = 'pending';
     try {
-      const data = await authApi.login(credentials);
-      runInAction(() => {
-        this.login = {
-          data: {
-            userId: data.data.userId,
-          },
-          loginRequestStatus: 'succeeded',
-          errorEmail: undefined,
-        };
-      });
+      const data = await authApi.login(param);
+      if (data.resultCode === 0) {
+        runInAction(() => this.setIsLoggedIn(true));
+      } else {
+        handleServerAppError(data);
+      }
     } catch (error) {
-      this.login.loginRequestStatus = 'failed';
+      runInAction(() => handleServerNetworkError(error as Error | null));
       this.login.errorEmail = 'Error! Failed to login! Try again!';
+    } finally {
+      runInAction(() => {
+        this.login.isLoginLoading = 'succeeded';
+        appStore.status = 'succeeded';
+      });
     }
   }
 
   async logoutUser(): Promise<void> {
-    this.login.loginRequestStatus = 'pending';
     try {
       const data = await authApi.logout();
-      runInAction(() => {
-        this.login = {
-          data: data.data,
-          loginRequestStatus: 'succeeded',
-        };
-      });
+      if (data.resultCode === 0) {
+        runInAction(() => {
+          this.setIsLoggedIn(false);
+        });
+      } else {
+        handleServerAppError(data);
+      }
     } catch (error) {
-      this.login.loginRequestStatus = 'failed';
+      runInAction(() => handleServerNetworkError(error as Error | null));
+    } finally {
+      runInAction(() => {
+        appStore.status = 'succeeded';
+      });
     }
   }
 }

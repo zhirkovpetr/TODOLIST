@@ -17,7 +17,7 @@ class TodolistStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.setTodolists();
+    // this.setTodolists();
     // this.taskStore = new TaskStore();
   }
 
