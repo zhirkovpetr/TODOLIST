@@ -7,6 +7,7 @@ import { appStore } from './index';
 
 export type TodolistType = TResponseTodolist & {
   filter: FilterType;
+  isTodolistsLoading: 'idle' | 'loading' | 'succeeded' | 'failed';
 };
 
 class TodolistStore {
@@ -18,7 +19,7 @@ class TodolistStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.setTodolists();
+    // this.setTodolists();
     // this.taskStore = new TaskStore();
   }
 
@@ -34,7 +35,11 @@ class TodolistStore {
     try {
       const data = await fetchTodolists.getTodolists();
       runInAction(() => {
-        this.todolists = data.map(t => ({ ...t, filter: 'All' }));
+        this.todolists = data.map(t => ({
+          ...t,
+          filter: 'All',
+          isTodolistsLoading: 'idle',
+        }));
       });
     } catch (error) {
       console.log(error);
@@ -53,7 +58,10 @@ class TodolistStore {
       const { data, resultCode } = await fetchTodolists.createTodolist(title);
       if (resultCode === 0) {
         runInAction(() => {
-          this.todolists = [{ ...data.item, filter: 'All' }, ...this.todolists];
+          this.todolists = [
+            { ...data.item, filter: 'All', isTodolistsLoading: 'idle' },
+            ...this.todolists,
+          ];
         });
       }
     } catch (error) {

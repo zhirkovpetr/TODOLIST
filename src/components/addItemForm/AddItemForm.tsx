@@ -6,10 +6,11 @@ import TextField from '@mui/material/TextField';
 
 export type AddItemFormPropsType = {
   addItem: (title: string) => void;
+  disabled?: boolean;
 };
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = memo(props => {
-  const { addItem } = props;
+  const { addItem, disabled = true } = props;
   const [titleInput, setTitleInput] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
 
@@ -51,7 +52,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = memo(props => {
         helperText={inputError && 'Field is required'}
         autoComplete="off"
       />
-      <IconButton color="primary" onClick={onAddTaskHandler}>
+      <IconButton color="primary" onClick={onAddTaskHandler} disabled={disabled}>
         <ControlPoint />
       </IconButton>
     </div>

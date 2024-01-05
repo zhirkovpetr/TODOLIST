@@ -57,12 +57,19 @@ export const Todolist: React.FC<TodolistPropsType> = observer(props => {
     <div className="App">
       <div>
         <h3>
-          <EditSpan title={title} onChangeTitle={onChangeTodolistTitle} />
+          <EditSpan
+            title={title}
+            onChangeTitle={onChangeTodolistTitle}
+            disabled={todolist.isTodolistsLoading === 'loading'}
+          />
           <IconButton aria-label="delete" size="large" onClick={onDeleteTodolistHandler}>
             <DeleteIcon />
           </IconButton>
         </h3>
-        <AddItemForm addItem={addTaskHandler} />
+        <AddItemForm
+          addItem={addTaskHandler}
+          disabled={todolist.isTodolistsLoading === 'loading'}
+        />
         <ul>
           {filterTasks(taskStore.tasks[id], filter).map(t => (
             <Task key={t.id} task={t} />
